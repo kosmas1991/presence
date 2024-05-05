@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "668853374217",
+    "project_id": "present-948c7",
+    "storage_bucket": "present-948c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668853374217:android:712e205b1de969981b17d8",
+        "android_client_info": {
+          "package_name": "gr.techzombie.present"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6D0r6O2Fu_lVoGWQu4-Uetc8l2tAU9Tc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
