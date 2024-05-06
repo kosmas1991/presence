@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:present/cubits/tagread/tagread_cubit.dart';
 import 'package:present/firebase_options.dart';
 import 'package:present/screens/homescreen.dart';
 
@@ -17,6 +19,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomeScreen());
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TagreadCubit(),
+        ),
+
+      ],
+      child: MaterialApp(home: HomeScreen()),
+    );
   }
 }

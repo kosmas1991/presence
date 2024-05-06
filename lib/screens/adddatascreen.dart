@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:present/cubits/tagread/tagread_cubit.dart';
+import 'package:present/cubits/tagread/tagread_state.dart';
 import 'package:present/widgets/textfield.dart';
 
 class AddDataScreen extends StatefulWidget {
@@ -23,6 +28,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
   Widget build(BuildContext context) {
     TextEditingController textEditingController1 = TextEditingController();
     TextEditingController textEditingController2 = TextEditingController();
+    context.read<TagreadCubit>().emitNewState(false);
 
     return SafeArea(
       child: Scaffold(
@@ -81,22 +87,45 @@ class _AddDataScreenState extends State<AddDataScreen> {
         child: Container(
           padding: EdgeInsets.all(20),
           height: 300,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FlutterLogo(
-                size: 150,
-              ),
-              Text(
-                "Approach NFC tag to the device",
-                style: TextStyle(fontSize: 15),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Close"))
-            ],
+          child: BlocBuilder<TagreadCubit, TagreadState>(
+            builder: (context, state) {
+              return !state.tagread
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FlutterLogo(
+                          size: 150,
+                        ),
+                        Text(
+                          "Approach NFC tag to the device",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Close"))
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                            width: 150,
+                            height: 150,
+                            child: FittedBox(
+                                child: Image.asset(
+                              'assets/images/success.png',
+                              fit: BoxFit.fill,
+                            ))),
+                        Text(
+                          "Data sent to NFC tag",
+                          style: TextStyle(fontSize: 15),
+                        ),
+
+                      ],
+                    );
+            },
           ),
         ),
       ),
@@ -120,11 +149,15 @@ class _AddDataScreenState extends State<AddDataScreen> {
         await ndef.write(message);
         result = 'Success to "Ndef Write"';
         //NfcManager.instance.stopSession();
-        Navigator.pop(context);
-        Navigator.pop(context);
+        context.read<TagreadCubit>().emitNewState(true);
+        Timer(Duration(seconds: 2), () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
       } catch (e) {
         result = e.toString();
         NfcManager.instance.stopSession(errorMessage: result.toString());
+
         Navigator.pop(context);
         Navigator.pop(context);
         return;

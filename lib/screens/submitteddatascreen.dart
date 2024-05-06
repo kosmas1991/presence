@@ -14,7 +14,13 @@ class SubmittedDataScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('submitted data'),
+              Text(
+                'submitted data',
+                style: TextStyle(fontSize: 30),
+              ),
+              SizedBox(
+                height: 20,
+              ),
               StreamBuilder(
                 stream: fire.collection('submits').snapshots(),
                 builder: (context, snapshot) {
@@ -25,8 +31,21 @@ class SubmittedDataScreen extends StatelessWidget {
                         itemCount: data!.docs.length,
                         itemBuilder: (context, index) {
                           var data2 = data.docs[index].data();
-                          return Text(
-                              '${data2['0'].toString()} ${data2['1'].toString()} ${timeago.format(data2['date'].toDate())}');
+                          return Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 2),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Text(
+                                    '${data2['0'].toString()} ${data2['1'].toString()} ${timeago.format(data2['date'].toDate())}'),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              )
+                            ],
+                          );
                         },
                       ),
                     );
